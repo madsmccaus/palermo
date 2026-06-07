@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Mummies of Palermo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jacquard+12&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    background: #ffffff;
+    color: #000000;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    --photo-size: 598px;
+    --price-gap: 26px;
+    --right-width: 45%;
+  }
+
+  .page {
+    display: flex;
+    height: 100vh;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 40px 40px 0 40px;
+    gap: 100px;
+  }
+
+  /* ---- Left column: fills remaining space, static (does not scroll) ---- */
+  .left {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 0;
+  }
+
+  /* Fixed-height slot pins the image to the top so its top padding
+     and the price position never shift between photos. */
+  .left .photo-frame {
+    width: 100%;
+    height: var(--photo-size);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .left .photo {
+    max-height: var(--photo-size);
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    display: block;
+  }
+
+  .left .amount {
+    font-family: "Jacquard 12", system-ui;
+    font-size: 173px;
+    line-height: 1;
+    margin-top: var(--price-gap);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* ---- Right column: scrollable, hidden scrollbar, tweakable width ---- */
+  .right {
+    flex: 0 0 var(--right-width);
+    max-width: var(--right-width);
+    min-width: 0;
+    height: 100%;
+    overflow-y: auto;
+    padding-bottom: 40px;
+    scrollbar-width: none;        /* Firefox */
+    -ms-overflow-style: none;     /* IE/Edge */
+  }
+  .right::-webkit-scrollbar {     /* Chrome/Safari */
+    width: 0;
+    height: 0;
+    display: none;
+  }
+
+  .right h1 {
+    font-family: "Jacquard 12", system-ui;
+    font-size: 64px;
+    line-height: 1.05;
+    font-weight: 400;
+    margin-bottom: 56px;
+    text-align: center;
+  }
+
+  .right p {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 150%;
+    text-wrap: pretty;
+  }
+
+  .right p + p {
+    text-indent: 2.4em;
+    margin-top: 0;
+  }
+
+  /* ---- Mobile: stack to one column, natural scroll, fluid type ---- */
+  @media (max-width: 820px) {
+    html, body {
+      height: auto;
+    }
+
+    .page {
+      flex-direction: column;
+      height: auto;
+      min-height: 100vh;
+      gap: clamp(32px, 8vw, 56px);
+      padding: 24px 24px 0 24px;
+    }
+
+    /* Both columns become full-width blocks */
+    .left,
+    .right {
+      flex: 0 0 auto;
+      width: 100%;
+      max-width: none;
+    }
+
+    /* Natural stack: photo + price, then heading + article */
+    .right {
+      height: auto;
+      overflow: visible;
+      padding-bottom: 48px;
+    }
+    .left {
+      padding-bottom: clamp(32px, 8vw, 56px);
+    }
+
+    /* Image fills the width, no fixed slot needed in single-column flow */
+    .left .photo-frame {
+      height: auto;
+    }
+    .left .photo {
+      max-height: 70vh;
+      max-width: 100%;
+    }
+
+    .left .amount {
+      margin-top: clamp(20px, 6vw, var(--price-gap));
+      font-size: clamp(56px, 19vw, 173px);
+    }
+
+    .right h1 {
+      font-size: clamp(40px, 12vw, 64px);
+      margin-bottom: clamp(24px, 7vw, 48px);
+      text-align: center;
+    }
+
+    .right p {
+      font-size: 18px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="left">
+      <div class="photo-frame">
+        <img class="photo" id="mummy-photo" src="images/p11.avif" alt="The mummies of the Capuchin catacombs, Palermo">
+      </div>
+      <div class="amount">$110,703.47</div>
+    </div>
+
+    <div class="right">
+      <h1>The Mummies<br>of Palermo.</h1>
+      <p>The Blue Guide, in its most recent edition (1977), recommends that tourists who enjoy something &ldquo;off the beaten track&rdquo; should round off their visit to Palermo with a detour to the Villa Palagonia&mdash;renowned for its stone monstrosities&mdash;and a descent into the Capuchin underground cemetery, where a &ldquo;macabre gallery of portraits&rdquo; awaits. &ldquo;Macabre&rdquo; is, indeed, the mildest epithet usually applied to this collection of eight thousand cadavers, most of them standing, in the vaults of the Capuchin convent. When a pale daylight filters through the sconces, revealing spectres, some well preserved, others utterly grotesque, clad in decaying finery and dust-coated garments, meeting their empty eye sockets is enough to send a thrill down any intrepid visitor&rsquo;s spine. They willingly qualify it as &ldquo;macabre,&rdquo; without resorting to harsher adjectives like &ldquo;disgusting,&rdquo; &ldquo;ghastly,&rdquo; or &ldquo;horrible.&rdquo;</p>
+      <p>Yet one notices&mdash;mingled with the crowds of foreigners similarly repulsed&mdash;entire families of Palermitans who treat this place with a curious warmth. Women seem unafraid, children giggle at the remains and play among the shriveled bones. The ways different peoples confront death&mdash;and how they treat their dead&mdash;offer boundless subject matter for anthropology. For as long as one stops at an instinctive shudder of horror, one will never truly comprehend the Cappuccini cemetery in Palermo.</p>
+      <p>During the great plagues of the Middle Ages, the Capuchins left a memorable testimony to their devotion. In the late 16th century, some of their bodies were discovered intact in the monastery basement: it was then that the miraculous properties of this soil were revealed. A first gallery was fitted out in 1599, providing a decent resting place for the friars. The first corpse, visible at the foot of the stairway&mdash;dressed in a brown habit&mdash;was that of Silvestro da Gubbio, installed on the day of the inauguration in 1599. Initially reserved for the ecclesiastical community, the cemetery soon opened to all orders of the deceased, reaching its greatest vogue in the nineteenth century. Today, entering the double-quadruple galleries in reverse of a clock&rsquo;s hands, one first comes upon the men, their smaller children on the right; if one doesn&rsquo;t recognize by stature the skeletons, the black-lettered verse of the evangelist above ensures: &ldquo;Your angels behold the face of your Father who is in heaven.&rdquo; (Matthew XVIII, 10)</p>
+      <p>Next comes the women&rsquo;s corridor, embellished with a mural inscription taken from St. Francis of Assisi&rsquo;s Canticle of the Creatures, and a special compartment for virgins&mdash;distinguished by their crown and palm&mdash;and greeted by a verse from Revelation (xiv, 4): &ldquo;They follow the Lamb wherever he goes; they were redeemed from among men.&rdquo; An ambiguity in Italian&mdash;perhaps a slip&mdash;permits both meanings: Seguono l&rsquo;Agnello dovunque vada, sono vergini (&ldquo;they are virgins/follow the Lamb wherever he goes&rdquo;).</p>
+      <p>Then comes the corridor of the &ldquo;notables&rdquo; (professionisti): military men, lawyers, doctors, artists. Finally, the two corridors reserved for religious: one for priests, clad in violet sacerdotal garments; the other for monks, wearing a hood and rope belt. The bodies are either suspended vertically (those we notice first, which make the strongest impact), enclosed in earthen boxes, or placed in small horizontal niches carved into the walls. Monsignor d&rsquo;Agostino, bishop of the Greek rite, who died in 1857, occupies a particularly spacious niche in the priests&rsquo; gallery&mdash;arrayed in his best vestments, his head resting on an embroidered pillow.</p>
+      <p>Like the others, his cadaver is well dressed, even if time has reduced the sumptuous velvet and silk fabrics. One can still make out the lace bonnet on the women&rsquo;s heads, gloves upon their bony fingers, and taffeta slippers on their feet. A tag pinned to the chest parchment bears the deceased&rsquo;s name, birth and death dates. Most of these singular catacombs were frequented by visitors during the nineteenth century. The dead belonged mostly to the wealthy bourgeoisie or aristocracy. Some notable tombstones cover the burials of more illustrious individuals: among them the Frenchman Alexandre Michaud, Count of Beauretour, lieutenant-general and aide-de-camp to His Majesty the Emperor of all the Russias, who died in Palermo on 22 July 1841.</p>
+      <p>One of the oldest fine burials is that of Ayaja, King of Tunis, who, blown to Palermo by a gale, fell ill and died in the Sicilian capital in 1622. He converted and received baptism under the name Philip of Austria, an event that caused great sensation, the Emperor of Austria himself serving as godfather. Until the nineteenth century, his console was topped by a paper crown and a dove in crepe paper, his hand holding a gilded chair-leg as if a scepter.</p>
+      <p>All bodies are carefully attired, though time has taken its toll on the decay. Some underwent especially gruesome preparations&mdash;Antonio Prestigiacomo stands upright in his hood and lifelike visage, into which he was plunged in arsenic and petrified by poison. Another method involved immersion in lime: Giuseppe Siciliano, a fourteen-year-old lad who died in 1851, stands beside young Rosalia Lombardo. Not all corpses withstood the drying well&mdash;some bent, dislocated, or lost limbs; heads and arms sometimes fell to the floor, only to be sewn back by their parents using wire after &ldquo;draining.&rdquo; This detail suggests that Sicilians do not relate to their dead in quite the same way as other Europeans.</p>
+      <p>Alexandre Dumas (of all travelers, the one who best understood Italy, alongside Stendhal) visited the cemetery in 1836. He recounts in Le Speronare how he was among the last to see Ayaja&rsquo;s body: perched on a console, crowned with paper and a dove, holding a staff. Dumas asked the caretaker to explain the symbol: it had been elevated to the dignity of concierge, holding a staff to prevent others from exiting. This morbid irony delighted Dumas, who found the display more risible than hideous&mdash;&ldquo;the romantic vogue of ghosts and spiritual terrors.&rdquo; Instead of a dark, poetic cult of the dead, the author of Antony was amused by the ironic familiarity of the Sicilians with their departed.</p>
+      <p>&ldquo;From time to time,&rdquo; he writes, &ldquo;heirs would come to see whether those among them still living in fortune were still there: they saw their uncle, grandfather, or wife grimacing at them, and that comforted them.&rdquo; Dumas concludes that believing in revenants in a country where the dead so strongly resemble the living is impossible.</p>
+      <p>He also observed the body of the Marquise Spataro, dying in 1834 at twenty-nine, robed in crepe, wearing a crown of roses and lace pillow, with a fresh bouquet replenished daily, by Baron P., who adored her.</p>
+      <p>&ldquo;It was a terrible love that endured for two years after such a spectacle.&rdquo; The cemetery has now become, in a sense, a museum. For about ten years, visitors&rsquo; cadavers have been separated by metal grills, reducing the horror effect. Until last century, families who came to pay respects recognized their loved ones; they could touch or disturb them. Guy de Maupassant, whose voyage to Sicily in La Vie errante recalls 1885, found particularly appalling this proximity of life and death. &ldquo;They show me a dead man in 1882... he had come to pick his place, accompanied by a friend. &lsquo;I&rsquo;ll be there,&rsquo; he said, and smiled. The friend returns now alone and watches for hours the immobile skeleton standing where indicated.&rdquo;</p>
+      <p>What would a Frenchman of 1980 say, when we treat death as a shameful episode? We bury the dead hurriedly; even funeral processions have disappeared from the streets. We make love clandestinely and die publicly. Today the reverse takes place: a beautiful triumph of Eros over Thanatos.</p>
+      <p>Jesse Fernandez&rsquo;s magnificent photographs do much to show us that in traditional Sicily there is no strict frontier between the living and the dead. The Capuchin hosts are not perceived as dead&mdash;neither as remnants of something ultimately erased into non&#8209;being, nor as semi&#8209;living entities in some limbo&mdash;but instead as a positive reserve of existence, a corps of permissionaries held in reserve for humanity. We preserve them, clothe them, adorn them, watch them, because they might return&mdash;not as revenants in the Western sense, but as if still alive: travellers away on a long journey, who might one evening unexpectedly return home and take their place at the family table.</p>
+      <p>Nothing is more instructive than reopening volumes of the Biblioth&egrave;que des traditions populaires siciliennes, where the great ethnopsychologist from Palermo, Giuseppe Pitr&egrave;, in the late nineteenth century, recorded his observations on the island&rsquo;s funeral rites and customs. We learn, in the chapter devoted to funeral rites and beliefs, that in Modica (in southeastern Sicily), for example, &ldquo;the dead also eat.&rdquo; Popular opinion holds that the deceased, in the three days after death, return home to assuage their hunger and thirst. Accordingly, their parents, during those days, leave the door ajar, and on a chair placed in the threshold they set out a loaf of bread and a jug of water.</p>
+      <p>In 1861, after Sicily&rsquo;s annexation by Piedmont to Victor Emmanuel&rsquo;s Italy, the Piemontese instituted national military service. A belief spread that the needle used to sew the deceased&rsquo;s &ldquo;shroud&rdquo; would exempt the body from this obligation. On the day of the medical exam, mothers prick that very needle into the lining of their son&rsquo;s uniform, sure he will return, a few hours later, reformed. When a dying man cannot die, one thinks, as Pittr&eacute; does, that he is guilty of some grave misdeed when in good health, so they bring him the appropriate remedy.</p>
+      <p>Another surprising custom: when the corpse of an adult becomes the object of noisy lamentation, the entire family tears at their hair and rips their garments&mdash;just in Sicily one is forbidden to weep in front of a dead child. That would offend God, who has compassion for the cherubim and calls him back so he may rejoice in paradise. Pittr&eacute; observed that at Ficarazzi, near Palermo, parents suspend a ribbon behind the head of a deceased little girl. Neighbours, upon leaving, each tie a knot on the ribbon&mdash;wishing to be remembered by the holy little soul taken to heaven. Fearful that death might forget its mission, they found this ingenious means, copied from the gesture of knotting a handkerchief, to keep their names in memory.</p>
+      <p>One sees that before recoiling in horror at the spectacle presented by the Capuchin cemetery&mdash;and before attributing morbid and macabre tastes to the Sicilians&mdash;one must enter into the reasons that justify such behavior. One of the most scandalous aspects for a European visitor is the promiscuity of these corpses. But solitude, is it not the deceased&rsquo;s most sacred rite? Is it not the greatest insult to pauper bodies to align them side by side, as in a public hospital ward? Romantic literature has so accustomed us to associate &ldquo;death&rdquo; with &ldquo;deathly isolation&rdquo; that we cannot conceive that the dead might desire to remain together. Yet in Sicily nothing is more alien than the taste for solitude. We sleep four or five in a room; we go out in groups; each of us needs the proximity and physical contact of as many companions as possible. So why would anyone think to reward the dead by placing them in hated solitude? The Capuchin cemetery in Palermo offers them that unexpected chance to resume the conversation abandoned at home.</p>
+      <p>The vertical pose of the cadavers also shocks the visitor, for here death is an &ldquo;eternal repose.&rdquo; In our civilization, children and the dead are sent to bed at night, under the pretext of ensuring their well&#8209;being. In Sicily, children play until midnight at their parents&rsquo; feet, and as for the dead, they would all remain eternally standing&mdash;if there were enough room&mdash;for it would prove that they continue to be present. Note that in Christian Western tradition, one does not place soldiers or political leaders, or some heroes of the Far West, pistol in hand, upright in their tomb. This is a trait by which one may measure the abyss between two civilizations.</p>
+      <p>The various ways of regulating the fate of corpses divide into two distinct orders of concern: one hygienic, always manifest, and one metaphysical, often concealed. We have seen that the Capuchin cemetery of Palermo provides a brilliant answer to the hygienic concern: no soil seems better suited to desiccating bodies than the convent&rsquo;s subterranean earth. But the metaphysical concern is no stranger to the curious arrangement of bodies along the galleries and their preparation in the vaults.</p>
+      <p>There are four possible ways of disposing of corpses. Abandonment: letting the corpse lie in the sun (Black Africa), to carrion birds&mdash;predators (Tibet). Destruction: by fire, ashes then either piously preserved in an urn, or ritually scattered. Conservation: most common in soil. Finally, idealization, which belongs to great myths: Christ&rsquo;s resurrection; Philemon and Baucis transformed into oak and lime trees, entwined forever by love.</p>
+      <p>In Palermo, conservation prevails, with borrowings from both the abandonment&#8209;phase (exposure to the sun) and the destruction&#8209;phase (the &ldquo;drainage&rdquo; technique). As for Rosalia Lombardo&rsquo;s embalming, one may see it as an attempt at idealization: the doctor who practised the injections and did not reveal his secret brings to mind the famous Prince of Sansevero in Naples, who, in the eighteenth century, practised alchemical operations to deny death&rsquo;s power. The Palermo method for treating cadavers thus calls upon a fusion of various known techniques: is it not this eclecticism that disturbs visitors&mdash;even if they are not consciously aware of it?</p>
+    </div>
+  </div>
+
+  <script>
+    // Cycle through the catacomb photographs, advancing one per page refresh.
+    (function () {
+      var photos = [
+        'images/p01.avif','images/p02.avif','images/p03.avif','images/p04.avif',
+        'images/p05.avif','images/p06.avif','images/p07.avif','images/p08.avif',
+        'images/p09.avif','images/p10.avif','images/p11.avif','images/p12.avif',
+        'images/p13.avif','images/p14.avif','images/p15.avif','images/p16.avif',
+        'images/p17.avif','images/p18.avif','images/p19.avif'
+      ];
+      var img = document.getElementById('mummy-photo');
+      var key = 'mummyPhotoIndex';
+      var prev = parseInt(localStorage.getItem(key), 10);
+      if (isNaN(prev)) prev = -1;
+      var next = (prev + 1) % photos.length;
+      localStorage.setItem(key, String(next));
+      img.src = photos[next];
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var el = document.querySelector('[data-comment-anchor="298a542afa-div"]');
+      var fmt = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+      // Try a couple of CORS-friendly public sources in order.
+      function fetchPrice() {
+        return fetch('https://api.coinbase.com/v2/prices/BTC-USD/spot', { cache: 'no-store' })
+          .then(function (r) {
+            if (!r.ok) throw new Error('coinbase ' + r.status);
+            return r.json();
+          })
+          .then(function (j) { return parseFloat(j.data.amount); })
+          .catch(function () {
+            return fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd', { cache: 'no-store' })
+              .then(function (r) {
+                if (!r.ok) throw new Error('coingecko ' + r.status);
+                return r.json();
+              })
+              .then(function (j) { return j.bitcoin.usd; });
+          });
+      }
+
+      function update() {
+        fetchPrice()
+          .then(function (price) {
+            if (typeof price === 'number' && isFinite(price)) {
+              el.textContent = fmt.format(price);
+            }
+          })
+          .catch(function (err) {
+            console.warn('BTC price fetch failed:', err);
+          });
+      }
+
+      update();
+      setInterval(update, 3000);
+    })();
+  </script>
+
+  <div id="tweaks-root"></div>
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel">
+    const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+      "photoSize": 598,
+      "priceGap": 26,
+      "rightWidth": 45
+    }/*EDITMODE-END*/;
+
+    function TweaksApp() {
+      const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+      React.useEffect(() => {
+        document.body.style.setProperty('--photo-size', t.photoSize + 'px');
+      }, [t.photoSize]);
+
+      React.useEffect(() => {
+        document.body.style.setProperty('--price-gap', t.priceGap + 'px');
+      }, [t.priceGap]);
+
+      React.useEffect(() => {
+        document.body.style.setProperty('--right-width', t.rightWidth + '%');
+      }, [t.rightWidth]);
+
+      return (
+        <TweaksPanel>
+          <TweakSection label="Image" />
+          <TweakSlider
+            label="Image size"
+            value={t.photoSize}
+            min={200}
+            max={700}
+            step={2}
+            unit="px"
+            onChange={(v) => setTweak('photoSize', v)}
+          />
+          <TweakSlider
+            label="Price gap"
+            value={t.priceGap}
+            min={0}
+            max={280}
+            step={2}
+            unit="px"
+            onChange={(v) => setTweak('priceGap', v)}
+          />
+          <TweakSection label="Layout" />
+          <TweakSlider
+            label="Right column"
+            value={t.rightWidth}
+            min={20}
+            max={55}
+            step={1}
+            unit="%"
+            onChange={(v) => setTweak('rightWidth', v)}
+          />
+        </TweaksPanel>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<TweaksApp />);
+  </script>
+</body>
+</html>
