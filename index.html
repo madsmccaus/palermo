@@ -104,11 +104,19 @@
     display: block;
   }
 
+  .left .price-label {
+    font-family: "Jacquard 12", system-ui;
+    font-size: 64px;
+    line-height: 1;
+    margin-top: var(--price-gap);
+    text-align: center;
+  }
+
   .left .amount {
     font-family: "Jacquard 12", system-ui;
     font-size: 173px;
     line-height: 1;
-    margin-top: var(--price-gap);
+    margin-top: 4px;
     text-align: center;
     white-space: nowrap;
   }
@@ -216,6 +224,7 @@
       <div class="photo-frame">
         <img class="photo" id="mummy-photo" src="images/p11.avif" alt="The mummies of the Capuchin catacombs, Palermo">
       </div>
+      <div class="price-label">Price of Bitcoin:</div>
       <div class="amount">$110,703.47</div>
     </div>
 
